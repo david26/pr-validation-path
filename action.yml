@@ -1,13 +1,19 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: pr-validation-path
+description: Check if the pull request can be created from source branch to dest branch
+author: David Márquez
+
+branding:
+  icon: git-pull-request
+  color: blue
+
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  github-token:
+    description: The `GITHUB_TOKEN` secret.
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  config-path:
+    description: The optional configuration file path.
+    default: .github/source-dest.yml
+    
 runs:
   using: 'node12'
   main: 'index.js'
