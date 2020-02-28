@@ -19,6 +19,9 @@
   "homepage": "https://github.com/david26/pr-validation-path#readme",
   "dependencies": {
     "@actions/core": "^1.2.2",
-    "@actions/github": "^2.1.1"
+    "@actions/github": "^2.1.1",
+    "fs": "0.0.1-security",
+    "js-yaml": "^3.13.1",
+    "path": "^0.12.7"
   }
 }
