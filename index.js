@@ -82,8 +82,9 @@ async function check() {
     }
  
     var isAllowed = false;
-    for (const branch of allowedBranches) {
-        if(source===branch){
+    for (var branch of allowedBranches) {
+        branch = branch.replace("-*","-");
+        if(source.startsWith(branch)==true){
             isAllowed = true;
         }
     }
