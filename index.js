@@ -38,7 +38,7 @@ async function check() {
     }
 
     const target = context.payload.pull_request.base.ref;
-    const allowedBranches = allowedOrigens;
+    const allowedBranches = allowedOrigens.split(",");
     const source = context.payload.pull_request.head.ref;
 
     core.info(`Merge branch "${source}" into "${target}".`);
