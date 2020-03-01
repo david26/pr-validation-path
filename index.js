@@ -75,32 +75,31 @@ async function check() {
     const allowedBranches = config[target];
     const source = context.payload.pull_request.head.ref;
 
-    core.info(`From branch "${source}" to "${target}".`);
-    core.info(`Allowed combinatios for "${target}" are: `);
+    core.info(`Merge branch "${source}" into "${target}".`);
+    core.info(`Allowed combinations for ${target} branch are: `);
     for (const branch of allowedBranches) {
-        core.info(` ${target} <- ${branch}.`);
+        core.info(` ${target} <- ${branch}`);
     }
+ 
+    var isAllowed = false;
     for (const branch of allowedBranches) {
-        core.info(` ${branch} -> ${target} `);
-    }
-
-    /*
-    core.info(`From branch "${source}" to "${target}".`);
-    core.info(JSON.stringify(allowedBranches));
-
-    for (const branch of allowedBranches) {
-        core.info(`branch ${branch}.`);
+        if(source===branch){
+            isAllowed = true;
+        }
     }
 
-    const label = targetLabels[0];
-    core.info(`Applying "${label}" label...`);
-    const labelResponse = await client.issues.addLabels({
-        issue_number: context.issue.number,
-        labels: [label],
-        owner,
-        repo,
-    });
-    core.debug(JSON.stringify(labelResponse.data));*/
+    if(isAllowed==false){
+        core.info("Pull request not allowed. Stepping out");
+        const label = "Pull request not allowed";
+        const labelResponse = await client.issues.addLabels({
+            issue_number: context.issue.number,
+            labels: [label],
+            owner,
+            repo,
+        });
+        core.debug(JSON.stringify(labelResponse.data));
+        return;
+    }
 }
 
 run();
