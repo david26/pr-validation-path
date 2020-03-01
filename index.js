@@ -28,7 +28,8 @@ async function getYamlConfig() {
 
 async function getConfig() {
     const ymlConfig = await getYamlConfig();
-    core.debug(JSON.stringify(ymlConfig));
+    core.info("El texto si sale");
+    core.info(JSON.stringify(ymlConfig));
     return ymlConfig;
 }
 
