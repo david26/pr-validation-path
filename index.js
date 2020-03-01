@@ -39,23 +39,17 @@ function getInput(name, fallback) {
 
 async function run() {
     try {
-        core.debug(JSON.stringify(token));
         core.debug(JSON.stringify(context.payload));
         core.debug(JSON.stringify(github.context));
         if (github.context.eventName != "pull_request") {
-            core.info("This action is supposed to run for pushes to pull requests only. Stepping out...");
+            core.info("This actions is only for pull request evaluation. Stepping out...");
             return;
         }
         const event = await getEvent();
         core.debug(JSON.stringify(event));
-        if (!["labeled", "unlabeled"].includes(event.action)) {
-            core.info("This action is supposed to run for labeled and unlabeled pull requests only. Stepping out...");
-            return;
-        }
         await check();
     }
     catch (err) {
-        //Even if it's a valid situation, we want to fail the action in order to be able to find the issue and fix it.
         core.setFailed(err.message);
         core.debug(JSON.stringify(err));
     }
@@ -76,30 +70,18 @@ async function check() {
         return;
     }
     core.info(`Config file loaded from ${CONFIG_PATH}`);
-    const target = context.payload.pull_request.base.ref,
-        targetLabels = config[target];
-    if (!targetLabels) {
-        core.info(`Branch ${target} not specified in the config file. Stepping out...`);
-        return;
+    const target = context.payload.pull_request.base.ref;
+    const allowedBranches = config[target];
+    const source = context.payload.pull_request.head.ref;
+    
+    core.info(`From branch "${source}" to "${target}".`);
+    core.info(JSON.stringify(allowedBranches));
+
+    for (const branch of allowedBranches) {
+        core.info(`branch ${branch}.`);
     }
-    const prLabels = context.payload.pull_request.labels.map(labelMap);
-    for (const label of targetLabels) {
-        if (prLabels.includes(label)) {
-            core.info(`Found label "${label}". Stepping out...`);
-            return;
-        }
-        core.debug(`Label ${label} not found.`);
-    }
-    if (apply == "never") {
-        core.setFailed("Missing respective label.");
-        core.info("`Apply` is set to `never`. Skipping...");
-        return;
-    }
-    if (targetLabels.length > 1 && apply == "single") {
-        core.info("Multiple respective labels found, but `apply` is set to `single`. Skipping...");
-        return;
-    }
-    const label = targetLabels[0];
+
+    /*const label = targetLabels[0];
     core.info(`Applying "${label}" label...`);
     const labelResponse = await client.issues.addLabels({
         issue_number: context.issue.number,
@@ -107,7 +89,7 @@ async function check() {
         owner,
         repo,
     });
-    core.debug(JSON.stringify(labelResponse.data));
+    core.debug(JSON.stringify(labelResponse.data));*/
 }
 
 run();
