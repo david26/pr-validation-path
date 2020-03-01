@@ -45,8 +45,7 @@ async function run() {
             core.info("This actions is only for pull request evaluation. Stepping out...");
             return;
         }
-        const event = await getEvent();
-        core.debug(JSON.stringify(event));
+
         await check();
     }
     catch (err) {
@@ -60,6 +59,7 @@ function labelMap(label) {
 }
 
 async function check() {
+    core.info(`In check`);
     if (context.payload.pull_request.state != "open") {
         core.info("Pull request is not open. Stepping out...");
         return;
@@ -70,10 +70,12 @@ async function check() {
         return;
     }
     core.info(`Config file loaded from ${CONFIG_PATH}`);
+
+    /*
     const target = context.payload.pull_request.base.ref;
     const allowedBranches = config[target];
     const source = context.payload.pull_request.head.ref;
-    
+
     core.info(`From branch "${source}" to "${target}".`);
     core.info(JSON.stringify(allowedBranches));
 
@@ -81,7 +83,7 @@ async function check() {
         core.info(`branch ${branch}.`);
     }
 
-    /*const label = targetLabels[0];
+    const label = targetLabels[0];
     core.info(`Applying "${label}" label...`);
     const labelResponse = await client.issues.addLabels({
         issue_number: context.issue.number,
