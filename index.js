@@ -84,21 +84,13 @@ async function check() {
     var isAllowed = false;
     for (var branch of allowedBranches) {
         branch = branch.replace("-*","-");
-        if(source.startsWith(branch)==true){
+        if(source.startsWith(branch)===true){
             isAllowed = true;
         }
     }
 
-    if(isAllowed==false){
+    if(isAllowed===false){
         core.info("Pull request not allowed. Stepping out");
-        const label = "Pull request not allowed";
-        const labelResponse = await client.issues.addLabels({
-            issue_number: context.issue.number,
-            labels: [label],
-            owner,
-            repo,
-        });
-        core.debug(JSON.stringify(labelResponse.data));
         return;
     }
 }
