@@ -84,12 +84,12 @@ async function check() {
     var isAllowed = false;
     for (var branch of allowedBranches) {
         branch = branch.replace("-*","-");
-        core.info("Evaluating ${brach} with ${source}");
+        core.info(`Evaluating ${brach} with ${source}`);
         if(source.startsWith(branch)===true){
             isAllowed = true;
         }
     }
-    core.info("is allowed -> ${isAllowed}");
+    core.info(`is allowed -> ${isAllowed}`);
     if(isAllowed===false){
         core.info("Pull request not allowed. Stepping out");
         core.setFailed("Pull request not allowed");
