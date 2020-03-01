@@ -60,11 +60,16 @@ function labelMap(label) {
 
 async function check() {
     core.info(`In check`);
-    if (context.payload.pull_request.state != "open") {
+    const state = context.payload.pull_request.state;
+    core.info(`${state}`);
+    if (state != "open") {
         core.info("Pull request is not open. Stepping out...");
         return;
     }
+    core.info(`Reading config`);
     const config = await getConfig();
+    core.info(`after reading config`);
+    core.info(JSON.stringify(config));
     if (!config) {
         core.info("Config file not found. Stepping out...");
         return;
