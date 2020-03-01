@@ -39,6 +39,7 @@ function getInput(name, fallback) {
 
 async function run() {
     try {
+        core.debug(JSON.stringify(token));
         core.debug(JSON.stringify(context.payload));
         if (github.context.eventName != "pull_request") {
             core.info("This action is supposed to run for pushes to pull requests only. Stepping out...");
