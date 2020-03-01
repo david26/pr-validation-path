@@ -76,14 +76,15 @@ async function check() {
     const source = context.payload.pull_request.head.ref;
 
     core.info(`From branch "${source}" to "${target}".`);
-    core.info(JSON.stringify(allowedBranches));
-
+    core.info(`Allowed combinatios for "${target}" are: `);
+    for (const branch of allowedBranches) {
+        core.info(` ${target} <- ${branch}.`);
+    }
+    for (const branch of allowedBranches) {
+        core.info(` ${branch} -> ${target} `);
+    }
 
     /*
-    const target = context.payload.pull_request.base.ref;
-    const allowedBranches = config[target];
-    const source = context.payload.pull_request.head.ref;
-
     core.info(`From branch "${source}" to "${target}".`);
     core.info(JSON.stringify(allowedBranches));
 
