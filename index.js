@@ -18,6 +18,7 @@ const getEvent = async () => JSON.parse(await fs.readFile(process.env["GITHUB_EV
 async function getYamlConfig() {
     try {
         const text = await fs.readFile(CONFIG_PATH);
+        core.info(text);
         return yaml.safeLoad(text);
     }
     catch (err) {
