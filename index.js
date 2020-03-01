@@ -17,13 +17,9 @@ const getEvent = async () => JSON.parse(await fs.readFile(process.env["GITHUB_EV
 
 async function getYamlConfig() {
     try {
-        core.info(`repo dir path -> ${REPO_DIRECTORY}`);
-        core.info(`config path -> ${CONFIG_PATH}`);
         const text = await fs.readFile(CONFIG_PATH);
-        core.info(text);
         return yaml.safeLoad(text);
-    }
-    catch (err) {
+    } catch (err) {
         core.info(err); 
         core.debug(err);
         return undefined;
@@ -32,8 +28,6 @@ async function getYamlConfig() {
 
 async function getConfig() {
     const ymlConfig = await getYamlConfig();
-    core.info("El texto si sale");
-    core.info(JSON.stringify(ymlConfig));
     return ymlConfig;
 }
 
@@ -50,7 +44,6 @@ async function run() {
             core.info("This actions is only for pull request evaluation. Stepping out...");
             return;
         }
-
         await check();
     }
     catch (err) {
@@ -66,20 +59,25 @@ function labelMap(label) {
 async function check() {
     core.info(`In check`);
     const state = context.payload.pull_request.state;
-    core.info(`${state}`);
+    const config = await getConfig();
+
     if (state != "open") {
         core.info("Pull request is not open. Stepping out...");
         return;
     }
-    core.info(`Reading config`);
-    const config = await getConfig();
-    core.info(`after reading config`);
-    core.info(JSON.stringify(config));
+
     if (!config) {
         core.info("Config file not found. Stepping out...");
         return;
     }
-    core.info(`Config file loaded from ${CONFIG_PATH}`);
+
+    const target = context.payload.pull_request.base.ref;
+    const allowedBranches = config[target];
+    const source = context.payload.pull_request.head.ref;
+
+    core.info(`From branch "${source}" to "${target}".`);
+    core.info(JSON.stringify(allowedBranches));
+
 
     /*
     const target = context.payload.pull_request.base.ref;
