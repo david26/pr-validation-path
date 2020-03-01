@@ -23,6 +23,7 @@ async function getYamlConfig() {
         return yaml.safeLoad(text);
     }
     catch (err) {
+        core.info(err);
         core.debug(err);
         return undefined;
     }
