@@ -82,11 +82,13 @@ async function check() {
     }
  
     var isAllowed = false;
-    for (var branch of allowedBranches) {
-        branch = branch.replace("-*","-");
-        core.info(`Evaluating ${branch} with ${source}`);
-        if(source.startsWith(branch)===true){
-            isAllowed = true;
+    if(allowedBranches!=null){
+        for (var branch of allowedBranches) {
+            branch = branch.replace("-*","-");
+            core.info(`Evaluating ${branch} with ${source}`);
+            if(source.startsWith(branch)===true){
+                isAllowed = true;
+            }
         }
     }
     core.info(`is allowed -> ${isAllowed}`);
