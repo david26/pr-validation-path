@@ -7,12 +7,12 @@ branding:
   color: blue
 
 inputs:
-  target-branch:
-    description: The target branch
+  github-token:
+    description: The `GITHUB_TOKEN` secret.
     required: true
-  allowed-branches:
-    description: The allowed branches
-    required: true
+  config-path:
+    description: The optional configuration file path.
+    default: .github/source-dest.yml
     
 runs:
   using: 'node12'
