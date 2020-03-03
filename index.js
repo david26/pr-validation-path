@@ -82,7 +82,7 @@ async function check() {
     }
  
     var isAllowed = false;
-    if(allowedBranches!=null){
+    if(allowedBranches!=null && typeof allowedBranches[Symbol.iterator] === 'function' ){
         for (var branch of allowedBranches) {
             branch = branch.replace("-*","-");
             core.info(`Evaluating ${branch} with ${source}`);
