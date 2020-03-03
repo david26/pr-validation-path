@@ -1,3 +1,9 @@
+git add index.js
+git commit -m "mensage"
+git tag -a -m "releace v?" v?
+git push --follow-tags
+
+
 # Hello world javascript action
 
 This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
