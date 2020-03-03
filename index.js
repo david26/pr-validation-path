@@ -77,14 +77,13 @@ async function check() {
 
     core.info(`Merge branch "${source}" into "${target}".`);
     core.info(`Allowed combinations for ${target} branch are: `);
-    for (const branch of allowedBranches) {
-        core.info(` ${target} <- ${branch}`);
-    }
- 
-    var isAllowed = false;
-    core.info("What");
-    core.info(JSON.stringify(allowedBranches));
+    var isAllowed = false;  
+
     if(allowedBranches!=null && typeof allowedBranches[Symbol.iterator] === 'function' ){
+        for (const branch of allowedBranches) {
+            core.info(` ${target} <- ${branch}`);
+        }
+
         for (var branch of allowedBranches) {
             branch = branch.replace("-*","-");
             core.info(`Evaluating ${branch} with ${source}`);
@@ -93,7 +92,9 @@ async function check() {
             }
         }
     }
+
     core.info(`is allowed -> ${isAllowed}`);
+
     if(isAllowed===false){
         var label = "Cerrado automaticamente por action";        
         core.info(`Applying "${label}" label...`);
