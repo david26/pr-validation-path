@@ -91,8 +91,24 @@ async function check() {
     }
     core.info(`is allowed -> ${isAllowed}`);
     if(isAllowed===false){
-        core.info("Pull request not allowed. Stepping out");
-        core.setFailed("Pull request not allowed");
+        var label = "Cerrado automaticamente por action";        
+        core.info(`Applying "${label}" label...`);
+
+        const labelResponse = await client.issues.addLabels({
+            issue_number: context.issue.number,
+            labels: [label],
+            owner,
+            repo,
+        });
+
+        await client.issues.update({
+            owner: context.issue.owner,
+            repo: context.issue.repo,
+            issue_number: context.issue.number,
+            state: 'closed'
+          });
+
+
         return;
     }
 }
